@@ -7,7 +7,7 @@
     <title>DataStream BI — E-Commerce Executive Analytics Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 </head>
@@ -24,7 +24,6 @@
 
         <!-- HEADER -->
         <header class="dashboard-header">
-            <div class="header-bar"></div>
             <div class="header-top">
                 <div class="brand">
                     <i class="fas fa-chart-line brand-icon"></i>
@@ -34,6 +33,9 @@
                     </div>
                 </div>
                 <div class="header-actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
                     <button class="icon-btn" id="notificationBtn" aria-label="Notifications">
                         <i class="fas fa-bell"></i>
                         <span class="notif-dot"></span>
@@ -47,11 +49,29 @@
                             <div class="dropdown-header">
                                 <span class="dropdown-user-name" id="dropdownUserName">Admin</span>
                                 <span class="dropdown-user-email" id="dropdownUserEmail">admin@datastream.com</span>
+                                <span class="role-badge" id="roleBadge">Admin</span>
                             </div>
                             <div class="dropdown-divider"></div>
-                            <button class="dropdown-item" role="menuitem"><i class="fas fa-user-cog"></i>
-                                Profile</button>
-                            <button class="dropdown-item" role="menuitem"><i class="fas fa-cog"></i> Settings</button>
+                            <button class="dropdown-item role-creator-plus" role="menuitem"><i class="fas fa-save"></i>
+                                Save View</button>
+                            <button class="dropdown-item role-creator-plus" role="menuitem"><i class="fas fa-file-alt"></i>
+                                Reports</button>
+                            <button class="dropdown-item role-editor-plus" role="menuitem"><i class="fas fa-database"></i>
+                                Data Sources</button>
+                            <button class="dropdown-item role-editor-plus" role="menuitem"><i class="fas fa-terminal"></i>
+                                Query Console</button>
+                            <button class="dropdown-item role-admin-only" role="menuitem"><i class="fas fa-shield-alt"></i>
+                                Admin Panel</button>
+                            <div class="dropdown-divider"></div>
+                            <div class="demo-switcher">
+                                <span class="demo-switcher-label"><i class="fas fa-flask"></i> Demo: Quick Switch</span>
+                                <div class="demo-switcher-btns">
+                                    <button class="demo-switch-btn" data-role="viewer">V</button>
+                                    <button class="demo-switch-btn" data-role="creator">C</button>
+                                    <button class="demo-switch-btn" data-role="editor">E</button>
+                                    <button class="demo-switch-btn" data-role="admin">A</button>
+                                </div>
+                            </div>
                             <div class="dropdown-divider"></div>
                             <button class="dropdown-item logout-item" id="logoutBtn" role="menuitem"><i
                                     class="fas fa-sign-out-alt"></i> Sign Out</button>
@@ -92,10 +112,34 @@
 
         </header>
 
+        <!-- ADMIN PAGE NAV (only for admin) -->
+        <nav class="admin-nav" id="adminNav">
+            <button class="admin-nav-item active" data-view="dashboard"><i class="fas fa-chart-pie"></i> Dashboard</button>
+            <button class="admin-nav-item" data-view="saved-views"><i class="fas fa-bookmark"></i> Saved Views</button>
+            <button class="admin-nav-item" data-view="reports"><i class="fas fa-file-alt"></i> Reports</button>
+            <button class="admin-nav-item" data-view="pipeline"><i class="fas fa-code-branch"></i> Pipeline</button>
+            <button class="admin-nav-item" data-view="query"><i class="fas fa-terminal"></i> Query</button>
+            <button class="admin-nav-item" data-view="admin"><i class="fas fa-shield-alt"></i> Admin</button>
+        </nav>
+
+        <!-- VIEW CONTAINER -->
+        <div class="view-container">
+
+        <!-- DASHBOARD VIEW -->
+        <div class="role-view active" id="view-dashboard">
+
         <!-- SMART INSIGHTS BAR -->
         <div class="insights-bar">
             <span class="insights-icon"><i class="fas fa-lightbulb"></i></span>
             <span class="insights-rotator" id="insightsRotator">Analyzing your data...</span>
+        </div>
+
+        <!-- VIEWER BANNER (read-only mode) -->
+        <div class="role-viewer-only viewer-banner">
+            <div class="viewer-banner-icon"><i class="fas fa-eye"></i></div>
+            <div class="viewer-banner-body">
+                <strong>Read-Only Mode</strong> &mdash; You are viewing a published snapshot. Filters and exports are disabled. Switch to <strong>Creator</strong> or above to edit.
+            </div>
         </div>
 
         <!-- KPI GRID -->
@@ -130,6 +174,49 @@
                     <p class="kpi-label">Conversion Rate</p>
                     <p class="kpi-value" id="kpiConversionValue">--</p>
                     <span class="kpi-badge" id="kpiConversionBadge">--</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOCUS METRICS HEADER -->
+        <div class="section-label">
+            <span class="section-label-line"></span>
+            <span class="section-label-text">Operations &amp; Engagement</span>
+            <span class="section-label-line"></span>
+        </div>
+
+        <!-- FOCUS METRICS GRID -->
+        <section class="kpi-grid" id="focusGrid">
+            <div class="kpi-card" id="kpiIngestion" data-delay="50">
+                <div class="kpi-icon ingestion"><i class="fas fa-database"></i></div>
+                <div class="kpi-body">
+                    <p class="kpi-label">Ingestion Volume</p>
+                    <p class="kpi-value" id="kpiIngestionValue">--</p>
+                    <span class="kpi-badge" id="kpiIngestionBadge">--</span>
+                </div>
+            </div>
+            <div class="kpi-card" id="kpiQueryPerf" data-delay="150">
+                <div class="kpi-icon query"><i class="fas fa-gauge-high"></i></div>
+                <div class="kpi-body">
+                    <p class="kpi-label">Query Performance</p>
+                    <p class="kpi-value" id="kpiQueryPerfValue">--</p>
+                    <span class="kpi-badge" id="kpiQueryPerfBadge">--</span>
+                </div>
+            </div>
+            <div class="kpi-card" id="kpiSessions" data-delay="250">
+                <div class="kpi-icon sessions"><i class="fas fa-users"></i></div>
+                <div class="kpi-body">
+                    <p class="kpi-label">Dashboard Sessions</p>
+                    <p class="kpi-value" id="kpiSessionsValue">--</p>
+                    <span class="kpi-badge" id="kpiSessionsBadge">--</span>
+                </div>
+            </div>
+            <div class="kpi-card" id="kpiExports" data-delay="350">
+                <div class="kpi-icon exports"><i class="fas fa-file-export"></i></div>
+                <div class="kpi-body">
+                    <p class="kpi-label">Report Exports</p>
+                    <p class="kpi-value" id="kpiExportsValue">--</p>
+                    <span class="kpi-badge" id="kpiExportsBadge">--</span>
                 </div>
             </div>
         </section>
@@ -193,7 +280,269 @@
             <span class="ticker-text" id="tickerText">Simulating live activity...</span>
         </div>
 
-        <!-- FOOTER -->
+        </div><!-- /view-dashboard -->
+
+        <!-- SAVED VIEWS VIEW -->
+        <div class="role-view" id="view-saved-views">
+            <div class="role-panel creator-panel" style="margin-top:0">
+                <div class="panel-header">
+                    <h2><i class="fas fa-bookmark"></i> My Saved Views</h2>
+                    <button class="panel-action-btn" id="saveViewBtn"><i class="fas fa-save"></i> Save Current View</button>
+                </div>
+                <div class="saved-views-grid">
+                    <div class="saved-view-card">
+                        <div class="sv-card-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="sv-card-body">
+                            <span class="sv-card-name">Monthly Performance Review</span>
+                            <span class="sv-card-desc">Revenue, conversion &amp; category breakdown</span>
+                            <span class="sv-card-meta"><i class="far fa-clock"></i> Last viewed 2 days ago</span>
+                        </div>
+                    </div>
+                    <div class="saved-view-card">
+                        <div class="sv-card-icon"><i class="fas fa-shopping-bag"></i></div>
+                        <div class="sv-card-body">
+                            <span class="sv-card-name">Product Deep-Dive</span>
+                            <span class="sv-card-desc">Top sellers, stock levels &amp; funnel analysis</span>
+                            <span class="sv-card-meta"><i class="far fa-clock"></i> Last viewed 1 week ago</span>
+                        </div>
+                    </div>
+                    <div class="saved-view-card">
+                        <div class="sv-card-icon"><i class="fas fa-cogs"></i></div>
+                        <div class="sv-card-body">
+                            <span class="sv-card-name">Operations Snapshot</span>
+                            <span class="sv-card-desc">Ingestion, queries, sessions &amp; exports</span>
+                            <span class="sv-card-meta"><i class="far fa-clock"></i> Last viewed 3 days ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PIPELINE VIEW -->
+        <div class="role-view" id="view-pipeline">
+            <div class="role-panel editor-panel" style="margin-top:0">
+                <div class="panel-header">
+                    <h2><i class="fas fa-code-branch"></i> Data Pipeline</h2>
+                    <button class="panel-action-btn" id="manageSourcesBtn"><i class="fas fa-plug"></i> Manage Sources</button>
+                </div>
+                <div class="pipeline-grid">
+                    <div class="pipeline-card">
+                        <div class="pl-card-head">
+                            <span class="pl-source-name">PostgreSQL (Production)</span>
+                            <span class="pl-status live">LIVE</span>
+                        </div>
+                        <div class="pl-card-stats">
+                            <span><i class="fas fa-database"></i> 1,342 tables</span>
+                            <span><i class="fas fa-sync"></i> 2.4s sync</span>
+                        </div>
+                        <div class="pl-progress"><div class="pl-progress-bar" style="width:98%"></div></div>
+                        <span class="pl-progress-label">98% uptime &middot; 12,430 rec/min</span>
+                    </div>
+                    <div class="pipeline-card">
+                        <div class="pl-card-head">
+                            <span class="pl-source-name">BigQuery (Analytics)</span>
+                            <span class="pl-status scheduled">SCHEDULED</span>
+                        </div>
+                        <div class="pl-card-stats">
+                            <span><i class="fas fa-database"></i> 847 tables</span>
+                            <span><i class="fas fa-clock"></i> Every 6h</span>
+                        </div>
+                        <div class="pl-progress"><div class="pl-progress-bar" style="width:100%"></div></div>
+                        <span class="pl-progress-label">Last sync: 2h ago &middot; 8,201 rec added</span>
+                    </div>
+                    <div class="pipeline-card">
+                        <div class="pl-card-head">
+                            <span class="pl-source-name">S3 Bucket (Batch)</span>
+                            <span class="pl-status warning">RETRYING</span>
+                        </div>
+                        <div class="pl-card-stats">
+                            <span><i class="fas fa-file"></i> 23 files pending</span>
+                            <span><i class="fas fa-exclamation-triangle"></i> 2 failures</span>
+                        </div>
+                        <div class="pl-progress"><div class="pl-progress-bar" style="width:45%"></div></div>
+                        <span class="pl-progress-label">Retry #3 &middot; 45% complete</span>
+                    </div>
+                    <div class="pipeline-card">
+                        <div class="pl-card-head">
+                            <span class="pl-source-name">REST API (Webhooks)</span>
+                            <span class="pl-status live">LIVE</span>
+                        </div>
+                        <div class="pl-card-stats">
+                            <span><i class="fas fa-bolt"></i> 240 req/s</span>
+                            <span><i class="fas fa-check-circle"></i> 99.7% success</span>
+                        </div>
+                        <div class="pl-progress"><div class="pl-progress-bar" style="width:100%"></div></div>
+                        <span class="pl-progress-label">All systems nominal &middot; 0 errors</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADMIN VIEW -->
+        <div class="role-view" id="view-admin">
+            <div class="role-panel admin-panel" style="margin-top:0">
+                <div class="panel-header">
+                    <h2><i class="fas fa-shield-alt"></i> System Administration</h2>
+                    <button class="panel-action-btn" id="auditLogBtn"><i class="fas fa-history"></i> View Audit Log</button>
+                </div>
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <div class="admin-card-header"><i class="fas fa-users-cog"></i> User Management</div>
+                        <div class="admin-card-body">
+                            <div class="admin-stat"><span class="admin-stat-value">12</span> Active Users</div>
+                            <div class="admin-stat"><span class="admin-stat-value">4</span> Roles</div>
+                            <div class="admin-stat"><span class="admin-stat-value">3</span> Pending Invites</div>
+                            <button class="admin-inline-btn"><i class="fas fa-user-plus"></i> Invite User</button>
+                        </div>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-card-header"><i class="fas fa-heartbeat"></i> System Health</div>
+                        <div class="admin-card-body">
+                            <div class="admin-stat"><span class="admin-stat-value ok">98.7%</span> Uptime</div>
+                            <div class="admin-stat"><span class="admin-stat-value ok">284ms</span> Avg Response</div>
+                            <div class="admin-stat"><span class="admin-stat-value warn">2</span> Warnings</div>
+                            <button class="admin-inline-btn"><i class="fas fa-sync-alt"></i> Run Diagnostics</button>
+                        </div>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-card-header"><i class="fas fa-clipboard-list"></i> Recent Audit</div>
+                        <div class="admin-card-body">
+                            <div class="audit-entry"><i class="fas fa-check-circle" style="color:var(--accent-green)"></i> <span>Admin User</span> updated pipeline config <small>12m ago</small></div>
+                            <div class="audit-entry"><i class="fas fa-check-circle" style="color:var(--accent-green)"></i> <span>Demo User</span> exported dashboard <small>1h ago</small></div>
+                            <div class="audit-entry"><i class="fas fa-exclamation-circle" style="color:var(--accent-amber)"></i> <span>S3 Connector</span> retry triggered <small>3h ago</small></div>
+                            <div class="audit-entry"><i class="fas fa-check-circle" style="color:var(--accent-green)"></i> <span>System</span> auto-scale up completed <small>6h ago</small></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REPORTS VIEW (Creator+) -->
+        <div class="role-view" id="view-reports">
+            <div class="role-panel reports-panel" style="margin-top:0">
+                <div class="panel-header">
+                    <h2><i class="fas fa-file-alt"></i> Report Builder</h2>
+                    <button class="panel-action-btn" id="createReportBtn"><i class="fas fa-plus"></i> Create Report</button>
+                </div>
+
+                <div class="rp-section">
+                    <h3 class="rp-section-title"><i class="fas fa-copy"></i> Start from a Template</h3>
+                    <div class="rp-templates">
+                        <div class="rp-template-card">
+                            <div class="rp-temp-icon" style="background:#eef2ff;color:#6366F1"><i class="fas fa-chart-bar"></i></div>
+                            <span class="rp-temp-name">Weekly Sales Summary</span>
+                            <span class="rp-temp-desc">Revenue, orders &amp; conversion trend</span>
+                            <button class="rp-use-btn">Use Template</button>
+                        </div>
+                        <div class="rp-template-card">
+                            <div class="rp-temp-icon" style="background:#f0fdf4;color:#16a34a"><i class="fas fa-box"></i></div>
+                            <span class="rp-temp-name">Inventory Health</span>
+                            <span class="rp-temp-desc">Stock levels, turnover &amp; alerts</span>
+                            <button class="rp-use-btn">Use Template</button>
+                        </div>
+                        <div class="rp-template-card">
+                            <div class="rp-temp-icon" style="background:#fef2f2;color:#dc2626"><i class="fas fa-users"></i></div>
+                            <span class="rp-temp-name">Customer Cohort</span>
+                            <span class="rp-temp-desc">Retention, LTV &amp; segmentation</span>
+                            <button class="rp-use-btn">Use Template</button>
+                        </div>
+                        <div class="rp-template-card">
+                            <div class="rp-temp-icon" style="background:#fefce8;color:#ca8a04"><i class="fas fa-truck"></i></div>
+                            <span class="rp-temp-name">Fulfillment Ops</span>
+                            <span class="rp-temp-desc">Shipping times, costs &amp; carrier mix</span>
+                            <button class="rp-use-btn">Use Template</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rp-section">
+                    <h3 class="rp-section-title"><i class="fas fa-history"></i> Recent Reports</h3>
+                    <table class="rp-reports-table">
+                        <thead><tr><th>Report Name</th><th>Type</th><th>Last Run</th><th>Status</th><th></th></tr></thead>
+                        <tbody>
+                            <tr><td>Q4 Revenue Deep-Dive</td><td>Bar Chart</td><td>2h ago</td><td><span class="rp-status done">Ready</span></td><td><button class="rp-action-btn"><i class="fas fa-download"></i></button></td></tr>
+                            <tr><td>Monthly Category Mix</td><td>Pie Chart</td><td>1d ago</td><td><span class="rp-status done">Ready</span></td><td><button class="rp-action-btn"><i class="fas fa-download"></i></button></td></tr>
+                            <tr><td>Inventory Forecast</td><td>Line Chart</td><td>3d ago</td><td><span class="rp-status pending">Building</span></td><td><button class="rp-action-btn" disabled><i class="fas fa-spinner fa-pulse"></i></button></td></tr>
+                            <tr><td>Funnel Optimization</td><td>Funnel</td><td>1w ago</td><td><span class="rp-status done">Ready</span></td><td><button class="rp-action-btn"><i class="fas fa-download"></i></button></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="rp-section">
+                    <h3 class="rp-section-title"><i class="fas fa-clock"></i> Scheduled Exports</h3>
+                    <div class="rp-schedule-grid">
+                        <div class="rp-sched-card"><i class="fas fa-calendar-week"></i> <strong>Weekly Digest</strong> — Mon 8AM <span class="rp-badge-light">Active</span></div>
+                        <div class="rp-sched-card"><i class="fas fa-calendar-day"></i> <strong>Daily Snapshot</strong> — Every 6h <span class="rp-badge-light">Active</span></div>
+                        <div class="rp-sched-card"><i class="fas fa-calendar-alt"></i> <strong>Monthly Review</strong> — 1st of month <span class="rp-badge-light">Draft</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUERY CONSOLE VIEW (Editor+) -->
+        <div class="role-view" id="view-query">
+            <div class="role-panel query-panel" style="margin-top:0">
+                <div class="panel-header">
+                    <h2><i class="fas fa-terminal"></i> Query Console</h2>
+                    <button class="panel-action-btn" id="runQueryBtn"><i class="fas fa-play"></i> Run Query</button>
+                </div>
+
+                <div class="qc-editor-section">
+                    <div class="qc-editor-header">
+                        <span><i class="fas fa-code"></i> SQL Query</span>
+                        <span class="qc-db-label">Database: <strong>datastream_prod</strong></span>
+                    </div>
+                    <textarea class="qc-editor" id="queryEditor" spellcheck="false">SELECT
+    DATE_TRUNC('month', order_date) AS month,
+    COUNT(DISTINCT order_id) AS orders,
+    ROUND(SUM(total_amount)::numeric, 2) AS revenue
+FROM orders
+WHERE order_date >= '2025-01-01'
+GROUP BY 1
+ORDER BY 1;</textarea>
+                    <div class="qc-actions">
+                        <span class="qc-hint"><i class="fas fa-keyboard"></i> Ctrl+Enter to run</span>
+                        <div class="qc-quick-btns">
+                            <button class="qc-quick-btn" data-query="top">Top Products</button>
+                            <button class="qc-quick-btn" data-query="revenue">Revenue by Category</button>
+                            <button class="qc-quick-btn" data-query="sessions">Daily Sessions</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="qc-results">
+                    <div class="qc-results-header">
+                        <span><i class="fas fa-table"></i> Results <small id="qcRowCount">(4 rows, 142ms)</small></span>
+                        <button class="qc-export-btn"><i class="fas fa-download"></i> Export CSV</button>
+                    </div>
+                    <div class="qc-table-wrapper">
+                        <table class="qc-results-table">
+                            <thead><tr><th>month</th><th>orders</th><th>revenue</th></tr></thead>
+                            <tbody>
+                                <tr><td>2025-01-01</td><td>1,847</td><td>$348,291.00</td></tr>
+                                <tr><td>2025-02-01</td><td>1,932</td><td>$375,104.00</td></tr>
+                                <tr><td>2025-03-01</td><td>2,104</td><td>$412,550.00</td></tr>
+                                <tr><td>2025-04-01</td><td>1,876</td><td>$381,220.00</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="qc-section">
+                    <h3 class="qc-section-title"><i class="fas fa-history"></i> Recent Queries</h3>
+                    <div class="qc-recent-list">
+                        <div class="qc-recent-item"><code>SELECT category, SUM(revenue) ...</code> <span class="qc-recent-meta">2m ago · 842ms</span></div>
+                        <div class="qc-recent-item"><code>SELECT DATE_TRUNC('day', ...</code> <span class="qc-recent-meta">15m ago · 231ms</span></div>
+                        <div class="qc-recent-item"><code>SELECT product_name, units ...</code> <span class="qc-recent-meta">1h ago · 1.2s</span></div>
+                        <div class="qc-recent-item"><code>WITH funnel AS (SELECT ...</code> <span class="qc-recent-meta">3h ago · 4.7s</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div><!-- /view-container -->
+
+        <!-- ROLE FOOTER (stays in all views) -->
         <footer class="dashboard-footer">
             <p>&copy; <span id="footerYear"></span> DataStream BI — Built by Swagat</p>
         </footer>

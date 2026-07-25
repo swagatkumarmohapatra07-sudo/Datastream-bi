@@ -7,102 +7,75 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { height: 100%; }
     #root { height: 100%; }
 
-    .dot-grid {
-      background-image: radial-gradient(#c084fc 1.2px, transparent 1.2px);
-      background-size: 22px 22px;
+    body[data-theme="dark"] { background: #0f172a !important; }
+    body[data-theme="dark"] .card-in { background: #1e293b !important; border-color: #334155 !important; }
+    body[data-theme="dark"] .card-in h2, body[data-theme="dark"] .card-in h1 { color: #f1f5f9 !important; }
+    body[data-theme="dark"] .card-in p, body[data-theme="dark"] .card-in label { color: #94a3b8 !important; }
+    body[data-theme="dark"] input { background: #334155 !important; border-color: #475569 !important; color: #f1f5f9 !important; }
+    body[data-theme="dark"] input::placeholder { color: #64748b !important; }
+    body[data-theme="dark"] .show-btn { background: #334155 !important; color: #94a3b8 !important; border-left-color: #475569 !important; }
+    body[data-theme="dark"] .show-btn:hover { background: #475569 !important; }
+    body[data-theme="dark"] .chk { background: #334155 !important; border-color: #475569 !important; }
+    body[data-theme="dark"] .btn-primary { background: #818cf8 !important; }
+    body[data-theme="dark"] .btn-primary:hover { background: #6366F1 !important; }
+
+    .card-in { animation: cardIn 0.5s cubic-bezier(0.22,1,0.36,1) forwards; }
+    @keyframes cardIn {
+      0% { opacity: 0; transform: translateY(20px) scale(0.97); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    .starburst { position: absolute; animation: spinSlow 20s linear infinite; }
-    @keyframes spinSlow { to { transform: rotate(360deg); } }
+    .fade-in { animation: fadeIn 0.4s ease forwards; opacity: 0; }
+    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+    .d1 { animation-delay: 0.08s; } .d2 { animation-delay: 0.16s; }
+    .d3 { animation-delay: 0.24s; } .d4 { animation-delay: 0.32s; }
+    .d5 { animation-delay: 0.40s; }
 
-    .smiley { animation: wobble 4s ease-in-out infinite; }
-    @keyframes wobble {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      25% { transform: translateY(-8px) rotate(-5deg); }
-      75% { transform: translateY(4px) rotate(3deg); }
+    .input-focus:focus {
+      border-color: #6366F1;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
     }
 
-    .sticker { animation: stickerDrift 6s ease-in-out infinite; }
-    @keyframes stickerDrift {
-      0%, 100% { transform: translateY(0) rotate(-4deg); }
-      50% { transform: translateY(-12px) rotate(2deg); }
+    .btn-primary {
+      background: #6366F1; color: #fff; font-weight: 600;
+      border: none; border-radius: 8px; cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
     }
-
-    .card-pop { animation: cardPop 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; }
-    @keyframes cardPop {
-      0% { opacity: 0; transform: scale(0.92) translateY(20px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .pop { animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards; opacity: 0; }
-    @keyframes popIn { to { opacity: 1; transform: translateY(0); } }
-    .p1 { animation-delay: 0.08s; } .p2 { animation-delay: 0.16s; }
-    .p3 { animation-delay: 0.24s; } .p4 { animation-delay: 0.32s; }
-    .p5 { animation-delay: 0.40s; }
-
-    .press:active {
-      transform: translate(4px, 4px) !important;
-      box-shadow: none !important;
-    }
-
-    .brut-input:focus {
-      outline: 3px solid #FACC15;
-      outline-offset: 2px;
-      background: #fff;
-    }
-
-    .brut-checkbox:checked + .chk {
-      background: #38BDF8; border-color: #000;
-    }
-    .brut-checkbox:checked + .chk::after {
-      content: ''; position: absolute; left: 5px; top: 1px;
-      width: 6px; height: 10px;
-      border: solid #000; border-width: 0 3px 3px 0; transform: rotate(45deg);
-    }
-
-    .show-btn {
-      font-weight: 700; background: #E9D5FF; border-left: 2px solid #000;
-      padding: 0 10px; cursor: pointer; font-size: 11px; white-space: nowrap;
-      display: flex; align-items: center; gap: 4px; transition: background 0.15s;
-    }
-    .show-btn:hover { background: #ddd6fe; }
-    .show-btn:active { background: #c4b5fd; }
-
-    .shadow-brut { box-shadow: 6px 6px 0px 0px rgba(0,0,0,1); }
-    .shadow-brut-sm { box-shadow: 4px 4px 0px 0px rgba(0,0,0,1); }
-
-    @media (min-width: 640px) {
-      .shadow-brut { box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); }
-    }
-    @media (min-width: 1024px) {
-      .shadow-brut { box-shadow: 10px 10px 0px 0px rgba(0,0,0,1); }
-    }
+    .btn-primary:hover { background: #4f46e5; }
+    .btn-primary:active { transform: scale(0.97); }
 
     .scroll-wrap {
       display: flex; flex-direction: column;
       overflow-y: auto; -webkit-overflow-scrolling: touch;
     }
-    .scroll-wrap > .card-pop { margin: auto; }
+    .scroll-wrap > .card-in { margin: auto; }
 
-    @media (max-width: 639px) {
-      .deco { display: none !important; }
+    .chk-box:checked + .chk {
+      background: #6366F1; border-color: #6366F1;
     }
-    @media (max-height: 680px) {
-      .pop.p1, .pop.p5 { display: none !important; }
+    .chk-box:checked + .chk::after {
+      content: ''; position: absolute; left: 4px; top: 1px;
+      width: 5px; height: 9px;
+      border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg);
     }
-    @media (max-height: 580px) {
-      .card-inner { padding: 14px 12px !important; }
-      .starburst, .smiley, .sticker { display: none !important; }
+
+    .show-btn {
+      font-size: 11px; font-weight: 600; color: #64748b;
+      background: #f1f5f9; border-left: 1px solid #e2e8f0;
+      padding: 0 10px; cursor: pointer; white-space: nowrap;
+      display: flex; align-items: center; gap: 4px; transition: background 0.15s;
     }
+    .show-btn:hover { background: #e2e8f0; }
 
     input, button { -webkit-tap-highlight-color: transparent; }
-    button { touch-action: manipulation; cursor: pointer; }
+    button { touch-action: manipulation; }
     @media (pointer: coarse) { input, button { min-height: 44px; } }
   </style>
 </head>
@@ -137,8 +110,8 @@
 
       var isLogin = tab === 'login';
 
-      function saveSession(name, email, initials) {
-        sessionStorage.setItem('datastream_bi_session', JSON.stringify({ name: name, email: email, initials: initials }));
+      function saveSession(name, email, initials, role) {
+        sessionStorage.setItem('datastream_bi_session', JSON.stringify({ name: name, email: email, initials: initials, role: role || 'viewer' }));
         window.location.href = 'index.html';
       }
 
@@ -146,7 +119,14 @@
         e.preventDefault();
         if (!email.trim() || !password.trim()) { setError('Please enter both email and password.'); return; }
         setError('');
-        saveSession(email.split('@')[0], email, email.slice(0,2).toUpperCase());
+        var foundRole = 'viewer';
+        try {
+          var users = JSON.parse(localStorage.getItem('datastream_bi_users') || '[]');
+          for (var u = 0; u < users.length; u++) {
+            if (users[u].email === email.trim()) { foundRole = users[u].role || 'viewer'; break; }
+          }
+        } catch (er) {}
+        saveSession(email.split('@')[0], email, email.slice(0,2).toUpperCase(), foundRole);
       }
 
       function handleSignup(e) {
@@ -156,7 +136,12 @@
         if (sPass !== sConfirm) { setError('Passwords do not match.'); return; }
         setError('');
         var initials = sName.trim().split(/\s+/).slice(0,2).map(function(w) { return w[0].toUpperCase(); }).join('') || 'U';
-        saveSession(sName.trim(), sEmail.trim(), initials);
+        try {
+          var users = JSON.parse(localStorage.getItem('datastream_bi_users') || '[]');
+          users.push({ name: sName.trim(), email: sEmail.trim(), password: sPass, initials: initials, role: 'creator' });
+          localStorage.setItem('datastream_bi_users', JSON.stringify(users));
+        } catch (er) {}
+        saveSession(sName.trim(), sEmail.trim(), initials, 'creator');
       }
 
       function handleForgot(e) {
@@ -175,204 +160,172 @@
       function switchTab(t) { setTab(t); setError(''); setForgot(false); }
 
       return (
-        <div className="scroll-wrap h-full w-full bg-[#E9D5FF] dot-grid font-['Space_Grotesk',sans-serif] p-3 sm:p-4 md:p-5">
+        <div className="scroll-wrap h-full w-full bg-[#f8fafc] font-['Inter',sans-serif] p-3 sm:p-4 md:p-5">
 
-          <div className="deco starburst" style={{ top: 'clamp(6%,8%,10%)', left: 'clamp(4%,6%,8%)', width: 'clamp(36px,7vw,80px)', height: 'clamp(36px,7vw,80px)' }}><Starburst /></div>
-          <div className="deco starburst" style={{ bottom: 'clamp(8%,10%,12%)', right: 'clamp(4%,5%,6%)', animationDuration: '25s', width: 'clamp(28px,5vw,60px)', height: 'clamp(28px,5vw,60px)' }}><Starburst /></div>
-          <div className="deco smiley absolute" style={{ top: 'clamp(10%,12%,14%)', right: 'clamp(6%,8%,10%)', width: 'clamp(28px,4vw,48px)', height: 'clamp(28px,4vw,48px)' }}><Smiley /></div>
-          <div className="deco sticker absolute" style={{ bottom: 'clamp(12%,14%,18%)', left: 'clamp(5%,7%,9%)' }}>
-            <div className="bg-white border-[3px] border-black px-2 sm:px-3 py-1 sm:py-1.5 rotate-[-6deg] shadow-brut-sm">
-              <span className="text-[9px] sm:text-xs font-bold">HELLO! ✨</span>
-            </div>
-          </div>
+          <div className="card-in w-full max-w-[340px] sm:max-w-[420px] md:max-w-[460px] bg-white border border-[#e2e8f0] rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.06)]">
 
-          <div className="card-pop w-full max-w-[320px] sm:max-w-[440px] md:max-w-[500px] bg-white border-[3px] sm:border-4 border-black shadow-brut">
+            <div className="p-6 sm:p-8 md:p-10">
 
-            <div className="h-[7px] sm:h-2 md:h-3 bg-[#FF5733] border-b-[3px] sm:border-b-4 border-black"></div>
-
-            <div className="card-inner p-5 sm:p-7 md:p-9">
-
-              <div className="pop p1 text-center mb-3 sm:mb-4">
-                <span className="inline-block bg-[#FACC15] border-2 border-black px-3 sm:px-4 py-1 sm:py-1.5 text-[11px] sm:text-xs md:text-sm font-bold tracking-tight rotate-[-2deg] shadow-brut-sm">
-                  {forgot ? 'FORGOT PASSWORD' : (isLogin ? 'WELCOME BACK' : 'CREATE ACCOUNT')}
-                </span>
+              <div className="fade-in d1 text-center mb-5 sm:mb-6">
+                <div className="w-10 h-10 mx-auto mb-3 bg-[#6366F1]/10 rounded-lg flex items-center justify-center">
+                  <svg className="w-5 h-5 text-[#6366F1]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
+                </div>
+                <h2 className="text-lg sm:text-xl font-bold text-[#1e293b] tracking-tight">DataStream BI</h2>
+                <p className="text-xs text-[#64748b] mt-1">E-Commerce Analytics Platform</p>
               </div>
 
-              <h1 className="pop p2 font-bold uppercase leading-[1.15] tracking-[-0.02em] text-black mb-4 sm:mb-5" style={{ fontSize: 'clamp(1.15rem, 4.5vw, 2rem)' }}>
-                {forgot ? 'Reset your\npassword' : (isLogin ? 'Sign in to your\naccount' : 'Create your\naccount')}
+              <h1 className="fade-in d2 text-[#1e293b] text-xl sm:text-2xl font-semibold tracking-tight mb-1">
+                {forgot ? 'Reset password' : (isLogin ? 'Welcome back' : 'Create account')}
               </h1>
+              <p className="fade-in d3 text-xs sm:text-sm text-[#64748b] mb-5 sm:mb-6">
+                {forgot ? 'Enter your email to retrieve your password.' : (isLogin ? 'Sign in to your dashboard.' : 'Get started with your account.')}
+              </p>
 
               {!forgot && (
-                <div className="pop p3 flex mb-4 sm:mb-5 border-[2px] sm:border-3 border-black rounded-md overflow-hidden">
-                  <button className={"flex-1 py-2 sm:py-2.5 text-[11px] sm:text-xs md:text-sm font-bold uppercase tracking-wider transition-all " + (isLogin ? 'bg-black text-white' : 'bg-white text-black hover:bg-zinc-100')} onClick={function() { switchTab('login'); }}>Sign In</button>
-                  <button className={"flex-1 py-2 sm:py-2.5 text-[11px] sm:text-xs md:text-sm font-bold uppercase tracking-wider transition-all border-l-[2px] sm:border-l-3 border-black " + (isLogin ? 'bg-white text-black hover:bg-zinc-100' : 'bg-black text-white')} onClick={function() { switchTab('signup'); }}>Sign Up</button>
+                <div className="fade-in d3 flex mb-5 rounded-lg border border-[#e2e8f0] overflow-hidden">
+                  <button className={"flex-1 py-2 text-xs sm:text-sm font-medium transition-all " + (isLogin ? 'bg-[#6366F1] text-white' : 'bg-white text-[#64748b] hover:text-[#1e293b]')} onClick={function() { switchTab('login'); }}>Sign In</button>
+                  <button className={"flex-1 py-2 text-xs sm:text-sm font-medium transition-all border-l border-[#e2e8f0] " + (isLogin ? 'bg-white text-[#64748b] hover:text-[#1e293b]' : 'bg-[#6366F1] text-white')} onClick={function() { switchTab('signup'); }}>Sign Up</button>
                 </div>
               )}
 
               {isLogin && forgot ? (
-                <form onSubmit={handleForgot} className="pop p4 space-y-3 sm:space-y-4">
+                <form onSubmit={handleForgot} className="fade-in d4 space-y-4">
                   <div>
-                    <label className="block text-[10px] sm:text-xs font-bold tracking-wider mb-1 uppercase">Email</label>
+                    <label className="block text-xs font-medium text-[#64748b] mb-1.5">Email</label>
                     <input type="email" value={fEmail} onChange={function(e) { setFEmail(e.target.value); }}
                       placeholder="you@example.com"
-                      className="brut-input w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-zinc-100 border-[2px] sm:border-3 border-black text-xs sm:text-sm font-medium placeholder:text-zinc-400 outline-none"
+                      className="input-focus w-full px-3.5 py-2.5 bg-[#f8fafc] border border-[#e2e8f0] rounded-lg text-sm text-[#1e293b] placeholder:text-[#94a3b8] outline-none transition-colors"
                     />
                   </div>
 
                   {fMsg && (
-                    <div className="bg-green-100 border-2 border-green-500 text-green-800 text-xs sm:text-sm font-bold px-3 py-2 rounded shadow-brut-sm" dangerouslySetInnerHTML={{ __html: fMsg }} />
+                    <div className="bg-[#f0fdf4] border border-[#86efac] text-[#16a34a] text-sm font-medium px-3 py-2 rounded-lg">{fMsg}</div>
                   )}
                   {error && (
-                    <div className="bg-red-100 border-2 border-red-500 text-red-700 text-xs sm:text-sm font-bold px-3 py-2 rounded shadow-brut-sm">{error}</div>
+                    <div className="bg-[#fef2f2] border border-[#fca5a5] text-[#dc2626] text-sm font-medium px-3 py-2 rounded-lg">{error}</div>
                   )}
 
-                  <button type="submit"
-                    className="press w-full flex items-center justify-center gap-2 bg-[#38BDF8] border-[2px] sm:border-3 border-black px-4 py-3 text-xs sm:text-sm font-bold uppercase tracking-wide shadow-brut hover:-translate-y-0.5 transition-all"
-                  >Show Password <span className="text-sm">&#128270;</span></button>
+                  <button type="submit" className="btn-primary w-full py-2.5 text-sm">Show Password</button>
 
                   <button type="button" onClick={function() { setForgot(false); setFEmail(''); setFMsg(''); setError(''); }}
-                    className="w-full text-center text-[10px] sm:text-xs font-bold underline underline-offset-2 hover:text-[#FF5733] transition-colors uppercase tracking-wider bg-transparent border-0"
-                  >&#8592; Back to Sign In</button>
+                    className="w-full text-center text-xs text-[#64748b] hover:text-[#6366F1] transition-colors bg-transparent border-0 font-medium"
+                  >&larr; Back to Sign In</button>
                 </form>
               ) : isLogin ? (
-                <form onSubmit={handleLogin} className="pop p4 space-y-3 sm:space-y-4">
+                <form onSubmit={handleLogin} className="fade-in d4 space-y-4">
                   <div>
-                    <label className="block text-[10px] sm:text-xs font-bold tracking-wider mb-1 uppercase">Email</label>
+                    <label className="block text-xs font-medium text-[#64748b] mb-1.5">Email</label>
                     <input type="email" value={email} onChange={function(e) { setEmail(e.target.value); }}
                       placeholder="you@example.com"
-                      className="brut-input w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-zinc-100 border-[2px] sm:border-3 border-black text-xs sm:text-sm font-medium placeholder:text-zinc-400 outline-none"
+                      className="input-focus w-full px-3.5 py-2.5 bg-[#f8fafc] border border-[#e2e8f0] rounded-lg text-sm text-[#1e293b] placeholder:text-[#94a3b8] outline-none transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[10px] sm:text-xs font-bold tracking-wider mb-1 uppercase">Password</label>
-                    <div className="flex border-[2px] sm:border-3 border-black">
+                    <label className="block text-xs font-medium text-[#64748b] mb-1.5">Password</label>
+                    <div className="flex border border-[#e2e8f0] rounded-lg overflow-hidden bg-[#f8fafc]">
                       <input type={showPw ? 'text' : 'password'} value={password} onChange={function(e) { setPassword(e.target.value); }}
                         placeholder="Enter password"
-                        className="brut-input flex-1 min-w-0 px-3 sm:px-4 py-2.5 sm:py-3 bg-zinc-100 text-xs sm:text-sm font-medium placeholder:text-zinc-400 outline-none border-0"
+                        className="flex-1 min-w-0 px-3.5 py-2.5 bg-transparent text-sm text-[#1e293b] placeholder:text-[#94a3b8] outline-none border-0"
                       />
                       <button type="button" onClick={function() { setShowPw(!showPw); }} className="show-btn">
                         {showPw ? <EyeClosed /> : <EyeOpen />}
-                        <span className="hidden sm:inline text-[10px] sm:text-xs">{showPw ? 'HIDE' : 'SHOW'}</span>
+                        <span className="hidden sm:inline text-[10px]">{showPw ? 'HIDE' : 'SHOW'}</span>
                       </button>
                     </div>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 pt-0.5">
+                  <div className="flex items-center justify-between">
                     <label className="flex items-center gap-2 cursor-pointer select-none group">
-                      <input type="checkbox" checked={remember} onChange={function() { setRemember(!remember); }} className="brut-checkbox sr-only" />
-                      <span className="chk relative w-[16px] h-[16px] sm:w-[18px] sm:h-[18px] border-[2px] sm:border-3 border-black bg-white flex-shrink-0 block"></span>
-                      <span className="text-[10px] sm:text-xs font-bold tracking-wider uppercase">Remember</span>
+                      <input type="checkbox" checked={remember} onChange={function() { setRemember(!remember); }} className="chk-box sr-only" />
+                      <span className="chk relative w-[16px] h-[16px] border border-[#e2e8f0] rounded bg-white flex-shrink-0 block"></span>
+                      <span className="text-xs text-[#64748b] font-medium">Remember me</span>
                     </label>
                     <button type="button" onClick={function() { setForgot(true); setError(''); }}
-                      className="text-[10px] sm:text-xs font-bold underline underline-offset-2 hover:text-[#FF5733] transition-colors uppercase tracking-wider bg-transparent border-0"
-                    >Forgot?</button>
+                      className="text-xs text-[#64748b] hover:text-[#6366F1] transition-colors bg-transparent border-0 font-medium"
+                    >Forgot password?</button>
                   </div>
 
                   {error && (
-                    <div className="bg-red-100 border-2 border-red-500 text-red-700 text-xs sm:text-sm font-bold px-3 py-2 rounded shadow-brut-sm">{error}</div>
+                    <div className="bg-[#fef2f2] border border-[#fca5a5] text-[#dc2626] text-sm font-medium px-3 py-2 rounded-lg">{error}</div>
                   )}
 
-                  <button type="submit"
-                    className="press w-full flex items-center justify-center gap-2 bg-[#FF5733] border-[2px] sm:border-3 border-black px-4 py-3 sm:py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wide shadow-brut hover:-translate-y-0.5 transition-all"
-                  >Let's Go <span className="text-sm sm:text-base">&#10132;</span></button>
+                  <button type="submit" className="btn-primary w-full py-2.5 text-sm">Sign In</button>
+
+                  <div className="fade-in d5 text-[10px] text-[#94a3b8] text-center mt-3 leading-relaxed">
+                    <strong className="text-[#64748b]">Demo accounts</strong><br />
+                    <span className="opacity-80">admin@datastream.com / password123 &nbsp;·&nbsp; creator@datastream.com / creator123<br />editor@datastream.com / editor123 &nbsp;·&nbsp; demo@datastream.com / demo1234</span>
+                  </div>
                 </form>
               ) : (
-                <form onSubmit={handleSignup} className="pop p4 space-y-2.5 sm:space-y-3.5">
+                <form onSubmit={handleSignup} className="fade-in d4 space-y-3.5">
                   <div>
-                    <label className="block text-[10px] sm:text-xs font-bold tracking-wider mb-1 uppercase">Full Name</label>
+                    <label className="block text-xs font-medium text-[#64748b] mb-1.5">Full Name</label>
                     <input type="text" value={sName} onChange={function(e) { setSName(e.target.value); }}
                       placeholder="Swagat Mohapatra"
-                      className="brut-input w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-zinc-100 border-[2px] sm:border-3 border-black text-xs sm:text-sm font-medium placeholder:text-zinc-400 outline-none"
+                      className="input-focus w-full px-3.5 py-2.5 bg-[#f8fafc] border border-[#e2e8f0] rounded-lg text-sm text-[#1e293b] placeholder:text-[#94a3b8] outline-none transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[10px] sm:text-xs font-bold tracking-wider mb-1 uppercase">Email</label>
+                    <label className="block text-xs font-medium text-[#64748b] mb-1.5">Email</label>
                     <input type="email" value={sEmail} onChange={function(e) { setSEmail(e.target.value); }}
                       placeholder="you@example.com"
-                      className="brut-input w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-zinc-100 border-[2px] sm:border-3 border-black text-xs sm:text-sm font-medium placeholder:text-zinc-400 outline-none"
+                      className="input-focus w-full px-3.5 py-2.5 bg-[#f8fafc] border border-[#e2e8f0] rounded-lg text-sm text-[#1e293b] placeholder:text-[#94a3b8] outline-none transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[10px] sm:text-xs font-bold tracking-wider mb-1 uppercase">Password</label>
-                    <div className="flex border-[2px] sm:border-3 border-black">
+                    <label className="block text-xs font-medium text-[#64748b] mb-1.5">Password</label>
+                    <div className="flex border border-[#e2e8f0] rounded-lg overflow-hidden bg-[#f8fafc]">
                       <input type={showSPw ? 'text' : 'password'} value={sPass} onChange={function(e) { setSPass(e.target.value); }}
                         placeholder="Min. 6 characters"
-                        className="brut-input flex-1 min-w-0 px-3 sm:px-4 py-2.5 sm:py-3 bg-zinc-100 text-xs sm:text-sm font-medium placeholder:text-zinc-400 outline-none border-0"
+                        className="flex-1 min-w-0 px-3.5 py-2.5 bg-transparent text-sm text-[#1e293b] placeholder:text-[#94a3b8] outline-none border-0"
                       />
                       <button type="button" onClick={function() { setShowSPw(!showSPw); }} className="show-btn">
                         {showSPw ? <EyeClosed /> : <EyeOpen />}
-                        <span className="hidden sm:inline text-[10px] sm:text-xs">{showSPw ? 'HIDE' : 'SHOW'}</span>
+                        <span className="hidden sm:inline text-[10px]">{showSPw ? 'HIDE' : 'SHOW'}</span>
                       </button>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-[10px] sm:text-xs font-bold tracking-wider mb-1 uppercase">Confirm</label>
-                    <div className="flex border-[2px] sm:border-3 border-black">
+                    <label className="block text-xs font-medium text-[#64748b] mb-1.5">Confirm Password</label>
+                    <div className="flex border border-[#e2e8f0] rounded-lg overflow-hidden bg-[#f8fafc]">
                       <input type={showSCon ? 'text' : 'password'} value={sConfirm} onChange={function(e) { setSConfirm(e.target.value); }}
                         placeholder="Re-enter password"
-                        className="brut-input flex-1 min-w-0 px-3 sm:px-4 py-2.5 sm:py-3 bg-zinc-100 text-xs sm:text-sm font-medium placeholder:text-zinc-400 outline-none border-0"
+                        className="flex-1 min-w-0 px-3.5 py-2.5 bg-transparent text-sm text-[#1e293b] placeholder:text-[#94a3b8] outline-none border-0"
                       />
                       <button type="button" onClick={function() { setShowSCon(!showSCon); }} className="show-btn">
                         {showSCon ? <EyeClosed /> : <EyeOpen />}
-                        <span className="hidden sm:inline text-[10px] sm:text-xs">{showSCon ? 'HIDE' : 'SHOW'}</span>
+                        <span className="hidden sm:inline text-[10px]">{showSCon ? 'HIDE' : 'SHOW'}</span>
                       </button>
                     </div>
                   </div>
 
                   {error && (
-                    <div className="bg-red-100 border-2 border-red-500 text-red-700 text-xs sm:text-sm font-bold px-3 py-2 rounded shadow-brut-sm">{error}</div>
+                    <div className="bg-[#fef2f2] border border-[#fca5a5] text-[#dc2626] text-sm font-medium px-3 py-2 rounded-lg">{error}</div>
                   )}
 
-                  <button type="submit"
-                    className="press w-full flex items-center justify-center gap-2 bg-[#38BDF8] border-[2px] sm:border-3 border-black px-4 py-3 sm:py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wide shadow-brut hover:-translate-y-0.5 transition-all"
-                  >Create Account <span className="text-sm sm:text-base">&#10132;</span></button>
+                  <button type="submit" className="btn-primary w-full py-2.5 text-sm">Create Account</button>
                 </form>
               )}
 
               {!forgot && (
-                <p className="pop p5 text-[10px] sm:text-xs font-bold text-center mt-4 sm:mt-5 uppercase tracking-wider">
+                <p className="fade-in d5 text-xs text-[#94a3b8] text-center mt-5">
                   {isLogin ? "Don't have an account? " : 'Already have an account? '}
                   <button type="button" onClick={function() { switchTab(isLogin ? 'signup' : 'login'); }}
-                    className="underline underline-offset-2 hover:text-[#38BDF8] transition-colors bg-transparent border-0 font-bold text-[10px] sm:text-xs"
+                    className="text-[#6366F1] hover:text-[#4f46e5] transition-colors bg-transparent border-0 font-medium text-xs"
                   >{isLogin ? 'Sign Up' : 'Sign In'}</button>
                 </p>
               )}
             </div>
-
-            <div className="h-[7px] sm:h-2 md:h-3 bg-[#38BDF8] border-t-[3px] sm:border-t-4 border-black"></div>
           </div>
 
-          <p className="pop p5 text-[9px] sm:text-[10px] font-bold text-zinc-500 uppercase tracking-widest text-center mt-3 sm:mt-4">
+          <p className="fade-in d5 text-[10px] text-[#94a3b8] text-center mt-4">
             DataStream BI &mdash; 2026
           </p>
         </div>
-      );
-    }
-
-    function Starburst() {
-      var lines = [];
-      for (var i = 0; i < 12; i++) { var a = i * 30 * Math.PI / 180; lines.push({ x1: 40 + Math.cos(a)*8, y1: 40 + Math.sin(a)*8, x2: 40 + Math.cos(a)*36, y2: 40 + Math.sin(a)*36 }); }
-      return (
-        <svg viewBox="0 0 80 80" className="w-full h-full">
-          {lines.map(function(l,i) { return <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke="#000" strokeWidth="1.8" opacity="0.3" />; })}
-          <circle cx="40" cy="40" r="20" fill="none" stroke="#000" strokeWidth="1.8" opacity="0.15" />
-          <circle cx="40" cy="40" r="4" fill="#000" opacity="0.25" />
-        </svg>
-      );
-    }
-
-    function Smiley() {
-      return (
-        <svg viewBox="0 0 48 48" className="w-full h-full" fill="none" stroke="#000" strokeWidth="2.5">
-          <circle cx="24" cy="24" r="20" fill="#FACC15" strokeWidth="3" />
-          <circle cx="18" cy="20" r="2.5" fill="#000" />
-          <circle cx="30" cy="20" r="2.5" fill="#000" />
-          <path d="M16 30 Q24 38 32 30" strokeWidth="3" strokeLinecap="round" />
-        </svg>
       );
     }
 
@@ -397,6 +350,28 @@
 
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(React.createElement(LoginPage));
+  </script>
+  <script>
+    (function() {
+      try {
+        var theme = localStorage.getItem('datastream_bi_theme');
+        if (theme === 'dark') { document.body.setAttribute('data-theme', 'dark'); }
+      } catch(e) {}
+    })();
+  </script>
+  <script>
+    (function() {
+      try {
+        var users = JSON.parse(localStorage.getItem('datastream_bi_users') || '[]');
+        if (users.length === 0) {
+          users.push({ name: 'Admin User',      email: 'admin@datastream.com',   password: 'password123', initials: 'AU', role: 'admin' });
+          users.push({ name: 'Creator User',    email: 'creator@datastream.com', password: 'creator123', initials: 'CU', role: 'creator' });
+          users.push({ name: 'Editor User',     email: 'editor@datastream.com',  password: 'editor123',  initials: 'EU', role: 'editor' });
+          users.push({ name: 'Viewer User',     email: 'demo@datastream.com',    password: 'demo1234',   initials: 'VU', role: 'viewer' });
+          localStorage.setItem('datastream_bi_users', JSON.stringify(users));
+        }
+      } catch(e) {}
+    })();
   </script>
 </body>
 </html>
