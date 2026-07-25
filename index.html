@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DataStream BI — E-Commerce Executive Analytics Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+
+<body>
+
+    <!-- ===== TOAST CONTAINER ===== -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <!-- ===== AUTH SCREEN ===== -->
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+        </div>
+
+        <div class="dot-grid" id="dotGrid"></div>
+
+        <div class="auth-3d-wrap">
+        <div class="auth-card" role="dialog" aria-labelledby="authTitle">
+            <div class="auth-ring"></div>
+            <div class="auth-card-inner">
+                <div class="auth-brand">
+                    <div class="auth-brand-icon-wrap">
+                        <i class="fas fa-chart-line auth-brand-icon"></i>
+                    </div>
+                    <h2 id="authTitle">DataStream BI</h2>
+                    <p class="auth-subtitle">E-Commerce Intelligence Platform</p>
+                </div>
+
+                <div class="auth-tabs" role="tablist">
+                    <button class="auth-tab active" data-tab="login" role="tab" aria-selected="true" id="tabLogin">Sign In</button>
+                    <button class="auth-tab" data-tab="signup" role="tab" aria-selected="false" id="tabSignup">Create Account</button>
+                    <div class="tab-indicator" id="tabIndicator"></div>
+                </div>
+
+                <form id="loginForm" class="auth-form active" novalidate>
+                    <div class="form-group">
+                        <div class="input-wrap">
+                            <input type="email" id="loginEmail" class="float-input" placeholder=" " required autocomplete="email" />
+                            <label for="loginEmail" class="float-label"><i class="fas fa-envelope"></i> Email</label>
+                        </div>
+                        <span class="form-error" id="loginEmailError"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-wrap">
+                            <input type="password" id="loginPassword" class="float-input" placeholder=" " required autocomplete="current-password" />
+                            <label for="loginPassword" class="float-label"><i class="fas fa-lock"></i> Password</label>
+                        </div>
+                        <span class="form-error" id="loginPasswordError"></span>
+                    </div>
+                    <div class="form-row">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="rememberMe" checked />
+                            <span class="checkmark"></span>
+                            <span>Remember me</span>
+                        </label>
+                        <a href="#" class="forgot-link">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="auth-submit-btn" id="loginBtn">
+                        <span class="btn-text">Sign In</span>
+                        <span class="btn-spinner"><i class="fas fa-spinner fa-spin"></i></span>
+                    </button>
+                    <div class="auth-divider"><span>or continue with</span></div>
+                    <div class="social-btns">
+                        <button type="button" class="social-btn google" aria-label="Sign in with Google"><i class="fab fa-google"></i> Google</button>
+                        <button type="button" class="social-btn github" aria-label="Sign in with GitHub"><i class="fab fa-github"></i> GitHub</button>
+                    </div>
+                    <p class="auth-alt">Don't have an account? <a href="#" id="switchToSignup">Sign up</a></p>
+                </form>
+
+                <form id="signupForm" class="auth-form" novalidate>
+                    <div class="form-group">
+                        <div class="input-wrap">
+                            <input type="text" id="signupName" class="float-input" placeholder=" " required autocomplete="name" />
+                            <label for="signupName" class="float-label"><i class="fas fa-user"></i> Full Name</label>
+                        </div>
+                        <span class="form-error" id="signupNameError"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-wrap">
+                            <input type="email" id="signupEmail" class="float-input" placeholder=" " required autocomplete="email" />
+                            <label for="signupEmail" class="float-label"><i class="fas fa-envelope"></i> Email</label>
+                        </div>
+                        <span class="form-error" id="signupEmailError"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-wrap">
+                            <input type="password" id="signupPassword" class="float-input" placeholder=" " required minlength="8" autocomplete="new-password" />
+                            <label for="signupPassword" class="float-label"><i class="fas fa-lock"></i> Password</label>
+                        </div>
+                        <span class="form-error" id="signupPasswordError"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-wrap">
+                            <input type="password" id="signupConfirm" class="float-input" placeholder=" " required autocomplete="new-password" />
+                            <label for="signupConfirm" class="float-label"><i class="fas fa-check-circle"></i> Confirm Password</label>
+                        </div>
+                        <span class="form-error" id="signupConfirmError"></span>
+                    </div>
+                    <button type="submit" class="auth-submit-btn" id="signupBtn">
+                        <span class="btn-text">Create Account</span>
+                        <span class="btn-spinner"><i class="fas fa-spinner fa-spin"></i></span>
+                    </button>
+                    <p class="auth-alt">Already have an account? <a href="#" id="switchToLogin">Sign in</a></p>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div id="dashboardApp" class="dashboard-app hidden">
+
+        <!-- HEADER -->
+        <header class="dashboard-header">
+            <div class="header-top">
+                <div class="brand">
+                    <i class="fas fa-chart-line brand-icon"></i>
+                    <div>
+                        <h1>E-Commerce Executive Analytics Dashboard</h1>
+                        <p class="subtitle">Real-Time Revenue, Conversion & Product Performance Insights</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn" id="notificationBtn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notif-dot"></span>
+                    </button>
+                    <div class="user-menu" id="userMenu">
+                        <button class="user-avatar" id="avatarBtn" aria-haspopup="true" aria-expanded="false">
+                            <span id="userInitials">AD</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown" role="menu">
+                            <div class="dropdown-header">
+                                <span class="dropdown-user-name" id="dropdownUserName">Admin</span>
+                                <span class="dropdown-user-email" id="dropdownUserEmail">admin@datastream.com</span>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item" role="menuitem"><i class="fas fa-user-cog"></i>
+                                Profile</button>
+                            <button class="dropdown-item" role="menuitem"><i class="fas fa-cog"></i> Settings</button>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item logout-item" id="logoutBtn" role="menuitem"><i
+                                    class="fas fa-sign-out-alt"></i> Sign Out</button>
+                        </div>
+                    </div>
+                    <button class="export-btn" id="exportBtn">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+            <div class="header-controls">
+                <div class="control-group">
+                    <label for="dateRange"><i class="fas fa-calendar-alt"></i> Date Range</label>
+                    <select id="dateRange">
+                        <option value="last30">Last 30 Days</option>
+                        <option value="quarter">Last Quarter</option>
+                        <option value="half">Last 6 Months</option>
+                        <option value="year" selected>Last Year</option>
+                        <option value="all">All Time</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="categoryFilter"><i class="fas fa-tag"></i> Category</label>
+                    <select id="categoryFilter">
+                        <option value="all">All Categories</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="apparel">Apparel</option>
+                        <option value="home">Home & Living</option>
+                        <option value="beauty">Beauty</option>
+                        <option value="fitness">Fitness</option>
+                    </select>
+                </div>
+                <div class="header-stats">
+                    <span class="live-indicator"><i class="fas fa-circle"></i> Live</span>
+                    <span class="update-time" id="updateTime">Updated just now</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- KPI GRID -->
+        <section class="kpi-grid" id="kpiGrid">
+            <div class="kpi-card" id="kpiRevenue" data-delay="0">
+                <div class="kpi-icon revenue"><i class="fas fa-dollar-sign"></i></div>
+                <div class="kpi-body">
+                    <p class="kpi-label">Total Revenue</p>
+                    <p class="kpi-value" id="kpiRevenueValue">--</p>
+                    <span class="kpi-badge" id="kpiRevenueBadge">--</span>
+                </div>
+            </div>
+            <div class="kpi-card" id="kpiOrders" data-delay="100">
+                <div class="kpi-icon orders"><i class="fas fa-shopping-cart"></i></div>
+                <div class="kpi-body">
+                    <p class="kpi-label">Total Orders</p>
+                    <p class="kpi-value" id="kpiOrdersValue">--</p>
+                    <span class="kpi-badge" id="kpiOrdersBadge">--</span>
+                </div>
+            </div>
+            <div class="kpi-card" id="kpiAov" data-delay="200">
+                <div class="kpi-icon aov"><i class="fas fa-receipt"></i></div>
+                <div class="kpi-body">
+                    <p class="kpi-label">Avg. Order Value (AOV)</p>
+                    <p class="kpi-value" id="kpiAovValue">--</p>
+                    <span class="kpi-badge" id="kpiAovBadge">--</span>
+                </div>
+            </div>
+            <div class="kpi-card" id="kpiConversion" data-delay="300">
+                <div class="kpi-icon conversion"><i class="fas fa-percentage"></i></div>
+                <div class="kpi-body">
+                    <p class="kpi-label">Conversion Rate</p>
+                    <p class="kpi-value" id="kpiConversionValue">--</p>
+                    <span class="kpi-badge" id="kpiConversionBadge">--</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHARTS GRID -->
+        <section class="charts-grid">
+            <div class="chart-card wide" data-delay="100">
+                <div class="chart-header">
+                    <h2><i class="fas fa-chart-area"></i> Revenue vs Profit Trend</h2>
+                    <span class="chart-period">Monthly · 12 Months</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card" data-delay="200">
+                <div class="chart-header">
+                    <h2><i class="fas fa-chart-pie"></i> Revenue by Category</h2>
+                    <span class="chart-period">Share of Revenue</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card" data-delay="300">
+                <div class="chart-header">
+                    <h2><i class="fas fa-funnel-dollar"></i> Sales Conversion Funnel</h2>
+                    <span class="chart-period">Customer Journey</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="funnelChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card" data-delay="400">
+                <div class="chart-header">
+                    <h2><i class="fas fa-crown"></i> Top Performing Products</h2>
+                    <span class="chart-period">Best Sellers</span>
+                </div>
+                <div class="table-wrapper">
+                    <table class="products-table" id="productsTable">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Revenue</th>
+                                <th>Units Sold</th>
+                                <th>Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="dashboard-footer">
+            <p>&copy; <span id="footerYear"></span> DataStream BI — Built by Swagat</p>
+        </footer>
+    </div>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
