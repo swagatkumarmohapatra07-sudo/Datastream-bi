@@ -232,7 +232,8 @@ function createGradient(ctx, top, bottom, c1, c2) {
   return g;
 }
 
-Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+Chart.defaults.font.family = "'Space Grotesk', system-ui, sans-serif";
+Chart.defaults.color = '#52525b';
 
 function safeChart(ctx, config) {
   if (typeof Chart === 'undefined') { console.warn('[DataStream] Chart.js not loaded'); return null; }
@@ -254,27 +255,27 @@ function initCharts() {
 
 function initRevenueChart(ctx) {
   var h = 360;
-  var revGrad = createGradient(ctx, 0, h, 'rgba(59, 130, 246, 0.35)', 'rgba(59, 130, 246, 0.01)');
-  var profitGrad = createGradient(ctx, 0, h, 'rgba(16, 185, 129, 0.3)', 'rgba(16, 185, 129, 0.01)');
+  var revGrad = createGradient(ctx, 0, h, 'rgba(255, 87, 51, 0.3)', 'rgba(255, 87, 51, 0.01)');
+  var profitGrad = createGradient(ctx, 0, h, 'rgba(16, 185, 129, 0.25)', 'rgba(16, 185, 129, 0.01)');
 
   safeChart(ctx, {
     type: 'line',
     data: {
       labels: DATA.months,
       datasets: [
-        { label: 'Gross Revenue', data: DATA.revenue, borderColor: '#3b82f6', backgroundColor: revGrad, fill: true, tension: 0.4, pointBackgroundColor: '#3b82f6', pointBorderColor: '#0f172a', pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 7, borderWidth: 3 },
-        { label: 'Net Profit', data: DATA.profit, borderColor: '#10b981', backgroundColor: profitGrad, fill: true, tension: 0.4, pointBackgroundColor: '#10b981', pointBorderColor: '#0f172a', pointBorderWidth: 2, pointRadius: 4, pointHoverRadius: 7, borderWidth: 3 }
+        { label: 'Gross Revenue', data: DATA.revenue, borderColor: '#FF5733', backgroundColor: revGrad, fill: true, tension: 0.4, pointBackgroundColor: '#fff', pointBorderColor: '#FF5733', pointBorderWidth: 3, pointRadius: 4, pointHoverRadius: 7, borderWidth: 3 },
+        { label: 'Net Profit', data: DATA.profit, borderColor: '#10b981', backgroundColor: profitGrad, fill: true, tension: 0.4, pointBackgroundColor: '#fff', pointBorderColor: '#10b981', pointBorderWidth: 3, pointRadius: 4, pointHoverRadius: 7, borderWidth: 3 }
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false, interaction: { intersect: false, mode: 'index' },
       scales: {
-        x: { grid: { color: 'rgba(148, 163, 184, 0.06)' }, ticks: { color: '#64748b', font: { size: 11 } } },
-        y: { grid: { color: 'rgba(148, 163, 184, 0.08)' }, ticks: { color: '#64748b', font: { size: 11 }, callback: function (v) { return '$' + v.toLocaleString(); } } }
+        x: { grid: { color: 'rgba(0,0,0,0.06)' }, ticks: { color: '#52525b', font: { size: 11 } } },
+        y: { grid: { color: 'rgba(0,0,0,0.07)' }, ticks: { color: '#52525b', font: { size: 11 }, callback: function (v) { return '$' + v.toLocaleString(); } } }
       },
       plugins: {
-        legend: { labels: { color: '#94a3b8', font: { size: 11 }, padding: 16, usePointStyle: true, pointStyle: 'circle' } },
-        tooltip: { backgroundColor: 'rgba(15, 23, 42, 0.95)', titleColor: '#f1f5f9', bodyColor: '#cbd5e1', borderColor: 'rgba(148, 163, 184, 0.15)', borderWidth: 1, padding: 12, cornerRadius: 8, callbacks: { label: function (ctx) { return ctx.dataset.label + ': $' + ctx.parsed.y.toLocaleString(); } } }
+        legend: { labels: { color: '#52525b', font: { size: 11 }, padding: 16, usePointStyle: true, pointStyle: 'circle' } },
+        tooltip: { backgroundColor: '#fff', titleColor: '#000', bodyColor: '#52525b', borderColor: '#000', borderWidth: 2, padding: 12, cornerRadius: 0, callbacks: { label: function (ctx) { return ctx.dataset.label + ': $' + ctx.parsed.y.toLocaleString(); } } }
       }
     }
   });
@@ -283,17 +284,17 @@ function initRevenueChart(ctx) {
 function initCategoryChart(ctx) {
   var labels = Object.keys(DATA.categories);
   var values = Object.values(DATA.categories);
-  var colors = ['#f97316', '#dc2626', '#f59e0b', '#10b981', '#8b5cf6'];
-  var hover = ['#fb923c', '#ef4444', '#fbbf24', '#34d399', '#a78bfa'];
+  var colors = ['#FF5733', '#FACC15', '#38BDF8', '#10b981', '#8b5cf6'];
+  var hover = ['#ff6b4a', '#fad834', '#5fc8fa', '#34d399', '#a78bfa'];
 
   safeChart(ctx, {
     type: 'doughnut',
-    data: { labels: labels, datasets: [{ data: values, backgroundColor: colors, hoverBackgroundColor: hover, borderColor: '#0f172a', borderWidth: 3, hoverOffset: 12 }] },
+    data: { labels: labels, datasets: [{ data: values, backgroundColor: colors, hoverBackgroundColor: hover, borderColor: '#000', borderWidth: 3, hoverOffset: 12 }] },
     options: {
       responsive: true, maintainAspectRatio: false, cutout: '68%',
       plugins: {
-        legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 }, padding: 16, usePointStyle: true, pointStyle: 'circle' } },
-        tooltip: { backgroundColor: 'rgba(15, 23, 42, 0.95)', titleColor: '#f1f5f9', bodyColor: '#cbd5e1', borderColor: 'rgba(148, 163, 184, 0.15)', borderWidth: 1, padding: 12, cornerRadius: 8, callbacks: { label: function (ctx) { var total = ctx.dataset.data.reduce(function (a, b) { return a + b; }, 0); return ctx.label + ': $' + ctx.parsed.toLocaleString() + ' (' + ((ctx.parsed / total) * 100).toFixed(1) + '%)'; } } }
+        legend: { position: 'bottom', labels: { color: '#52525b', font: { size: 11, weight: '600' }, padding: 16, usePointStyle: true, pointStyle: 'circle' } },
+        tooltip: { backgroundColor: '#fff', titleColor: '#000', bodyColor: '#52525b', borderColor: '#000', borderWidth: 2, padding: 12, cornerRadius: 0, callbacks: { label: function (ctx) { var total = ctx.dataset.data.reduce(function (a, b) { return a + b; }, 0); return ctx.label + ': $' + ctx.parsed.toLocaleString() + ' (' + ((ctx.parsed / total) * 100).toFixed(1) + '%)'; } } }
       }
     }
   });
@@ -307,17 +308,17 @@ function initFunnelChart(ctx) {
     type: 'bar',
     data: {
       labels: labels,
-      datasets: [{ label: 'Users', data: values, backgroundColor: ['rgba(249, 115, 22, 0.75)', 'rgba(220, 38, 38, 0.7)', 'rgba(245, 158, 11, 0.7)', 'rgba(16, 185, 129, 0.65)', 'rgba(139, 92, 246, 0.7)'], borderColor: ['#f97316', '#dc2626', '#f59e0b', '#10b981', '#8b5cf6'], borderWidth: 1, borderRadius: 6, barPercentage: 0.65 }]
+      datasets: [{ label: 'Users', data: values, backgroundColor: ['rgba(255, 87, 51, 0.8)', 'rgba(250, 204, 21, 0.75)', 'rgba(56, 189, 248, 0.7)', 'rgba(16, 185, 129, 0.7)', 'rgba(139, 92, 246, 0.7)'], borderColor: ['#FF5733', '#FACC15', '#38BDF8', '#10b981', '#8b5cf6'], borderWidth: 2, borderRadius: 0, barPercentage: 0.6 }]
     },
     options: {
       responsive: true, maintainAspectRatio: false, indexAxis: 'y',
       scales: {
-        x: { grid: { color: 'rgba(148, 163, 184, 0.06)' }, ticks: { color: '#64748b', font: { size: 11 } } },
-        y: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 12, weight: '500' } } }
+        x: { grid: { color: 'rgba(0,0,0,0.06)' }, ticks: { color: '#52525b', font: { size: 11 } } },
+        y: { grid: { display: false }, ticks: { color: '#52525b', font: { size: 12, weight: '600' } } }
       },
       plugins: {
         legend: { display: false },
-        tooltip: { backgroundColor: 'rgba(15, 23, 42, 0.95)', titleColor: '#f1f5f9', bodyColor: '#cbd5e1', borderColor: 'rgba(148, 163, 184, 0.15)', borderWidth: 1, padding: 12, cornerRadius: 8, callbacks: { label: function (ctx) { return ctx.parsed.x.toLocaleString() + ' users'; } } }
+        tooltip: { backgroundColor: '#fff', titleColor: '#000', bodyColor: '#52525b', borderColor: '#000', borderWidth: 2, padding: 12, cornerRadius: 0, callbacks: { label: function (ctx) { return ctx.parsed.x.toLocaleString() + ' users'; } } }
       }
     }
   });
@@ -410,6 +411,10 @@ function initDashboard() {
     initCharts();
     initExport();
     initUserMenu();
+    InsightEngine.init();
+    renderSparklines();
+    renderMarginRing();
+    ActivityTicker.init();
   } catch (e) {
     console.warn('[DataStream] Dashboard init error:', e);
   }
@@ -437,6 +442,215 @@ function initDashboard() {
     });
   }
 }
+
+/* =====================================================
+   SMART INSIGHTS ENGINE
+   ===================================================== */
+
+var InsightEngine = {
+  insights: [],
+  index: 0,
+  el: null,
+  timer: null,
+
+  init: function () {
+    this.el = document.getElementById('insightsRotator');
+    if (!this.el) return;
+    this._generate();
+    this._rotate();
+    this.timer = setInterval(this._rotate.bind(this), 5000);
+  },
+
+  _generate: function () {
+    var rev = KpiEngine.totalRevenue;
+    var orders = KpiEngine.totalOrders;
+    var aov = KpiEngine.aov;
+    var conv = KpiEngine.conversionRate;
+    var revG = KpiEngine.revenueGrowth;
+
+    var cats = Object.keys(DATA.categories);
+    var topCat = cats.reduce(function (a, b) { return DATA.categories[a] > DATA.categories[b] ? a : b; });
+    var topCatVal = DATA.categories[topCat];
+    var prod = DATA.products[0];
+    var funnelRate = Math.round((DATA.funnel['Purchases'] / DATA.funnel['Cart Additions']) * 100);
+
+    this.insights = [
+      'Revenue hit $' + rev.toLocaleString() + ' — up ' + revG.toFixed(1) + '% vs last period. ' + topCat + ' leads at $' + topCatVal.toLocaleString() + '.',
+      'Conversion rate of ' + conv.toFixed(2) + '% is ' + (conv - 2.5).toFixed(2) + '% above industry benchmark.',
+      'Top seller: ' + prod.name + ' — $' + prod.revenue.toLocaleString() + ' revenue, ' + prod.units + ' units sold.',
+      'Avg order value is $' + aov.toFixed(2) + ' across ' + orders.toLocaleString() + ' orders this period.',
+      'Cart-to-purchase rate: ' + funnelRate + '% — strong checkout conversion flow.'
+    ];
+  },
+
+  _rotate: function () {
+    if (!this.insights.length || !this.el) return;
+    this.el.style.opacity = '0';
+    var self = this;
+    setTimeout(function () {
+      self.el.textContent = self.insights[self.index];
+      self.el.style.opacity = '1';
+      self.index = (self.index + 1) % self.insights.length;
+    }, 250);
+  }
+};
+
+/* =====================================================
+   KPI SPARKLINES
+   ===================================================== */
+
+function renderSparklines() {
+  var sets = {
+    kpiRevenue: DATA.revenue,
+    kpiOrders: _monthlyOrders(),
+    kpiAov: _monthlyAov(),
+    kpiConversion: [3.1, 3.2, 3.4, 3.3, 3.5, 3.6, 3.4, 3.7, 3.8, 3.7, 3.9, 4.0]
+  };
+
+  for (var id in sets) {
+    var card = document.getElementById(id);
+    if (!card) continue;
+    var body = card.querySelector('.kpi-body');
+    if (!body) continue;
+    body.appendChild(_buildSparklineSVG(sets[id]));
+  }
+}
+
+function _monthlyOrders() {
+  var base = DATA.funnel['Purchases'] / 12;
+  return DATA.revenue.map(function (r, i) {
+    var factor = r / DATA.revenue[6];
+    return Math.round(base * factor * (0.85 + Math.random() * 0.3));
+  });
+}
+
+function _monthlyAov() {
+  var orders = _monthlyOrders();
+  return DATA.revenue.map(function (r, i) { return +(r / orders[i]).toFixed(2); });
+}
+
+function _buildSparklineSVG(data) {
+  var NS = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('class', 'kpi-sparkline');
+  svg.setAttribute('viewBox', '0 0 100 26');
+  svg.setAttribute('preserveAspectRatio', 'none');
+
+  var min = Math.min.apply(null, data);
+  var max = Math.max.apply(null, data);
+  var range = max - min || 1;
+  var pad = 2;
+  var points = data.map(function (v, i) {
+    var x = (i / (data.length - 1)) * (100 - pad * 2) + pad;
+    var y = 24 - ((v - min) / range) * 20;
+    return (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+  }).join(' ');
+
+  var path = document.createElementNS(NS, 'path');
+  path.setAttribute('d', points);
+  path.setAttribute('fill', 'none');
+  path.setAttribute('stroke', '#000');
+  path.setAttribute('stroke-width', '1.8');
+  path.setAttribute('stroke-linecap', 'round');
+  path.setAttribute('stroke-linejoin', 'round');
+  svg.appendChild(path);
+
+  var area = document.createElementNS(NS, 'path');
+  area.setAttribute('d', points + ' L' + (100 - pad) + ',24 L' + pad + ',24 Z');
+  area.setAttribute('fill', 'rgba(0,0,0,0.06)');
+  svg.appendChild(area);
+
+  return svg;
+}
+
+/* =====================================================
+   PROFIT MARGIN RING
+   ===================================================== */
+
+function renderMarginRing() {
+  var card = document.getElementById('kpiRevenue');
+  if (!card) return;
+
+  var totalRev = DATA.revenue.reduce(function (a, b) { return a + b; }, 0);
+  var totalProfit = DATA.profit.reduce(function (a, b) { return a + b; }, 0);
+  var margin = (totalProfit / totalRev) * 100;
+
+  var wrap = document.createElement('div');
+  wrap.className = 'kpi-ring';
+
+  var NS = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 48 48');
+
+  var r = 19, cx = 24, cy = 24;
+  var circ = 2 * Math.PI * r;
+
+  var bg = document.createElementNS(NS, 'circle');
+  bg.setAttribute('cx', cx); bg.setAttribute('cy', cy);
+  bg.setAttribute('r', r);
+  bg.setAttribute('fill', 'none');
+  bg.setAttribute('stroke', '#e4e4e7');
+  bg.setAttribute('stroke-width', '3.5');
+  svg.appendChild(bg);
+
+  var prog = document.createElementNS(NS, 'circle');
+  prog.setAttribute('cx', cx); prog.setAttribute('cy', cy);
+  prog.setAttribute('r', r);
+  prog.setAttribute('fill', 'none');
+  prog.setAttribute('stroke', '#10b981');
+  prog.setAttribute('stroke-width', '3.5');
+  prog.setAttribute('stroke-linecap', 'round');
+  prog.setAttribute('stroke-dasharray', circ);
+  prog.setAttribute('stroke-dashoffset', circ - (margin / 100) * circ);
+  prog.setAttribute('transform', 'rotate(-90 24 24)');
+  svg.appendChild(prog);
+
+  var text = document.createElementNS(NS, 'text');
+  text.setAttribute('x', cx); text.setAttribute('y', cy);
+  text.setAttribute('text-anchor', 'middle');
+  text.setAttribute('dominant-baseline', 'central');
+  text.setAttribute('font-size', '9');
+  text.setAttribute('font-weight', '700');
+  text.setAttribute('font-family', "'Space Grotesk', sans-serif");
+  text.textContent = Math.round(margin) + '%';
+  svg.appendChild(text);
+
+  wrap.appendChild(svg);
+  card.appendChild(wrap);
+}
+
+/* =====================================================
+   ACTIVITY TICKER
+   ===================================================== */
+
+var ActivityTicker = {
+  events: [
+    { icon: 'shopping-cart', text: 'New order placed — Wireless ANC Headphones', color: '#10b981' },
+    { icon: 'user-plus', text: 'New customer registered', color: '#38BDF8' },
+    { icon: 'eye', text: '500+ product views in the last hour', color: '#8b5cf6' },
+    { icon: 'star', text: '5★ review on Ergonomic Office Chair', color: '#FACC15' },
+    { icon: 'trending-up', text: 'Conversion rate up 0.3% this hour', color: '#10b981' },
+    { icon: 'dollar-sign', text: '$2,450 revenue in the last 30 min', color: '#FF5733' },
+    { icon: 'exclamation-triangle', text: 'Low stock alert: Smart Fitness Tracker Pro', color: '#ef4444' },
+    { icon: 'clock', text: 'Peak shopping hour — 8 PM EST', color: '#38BDF8' }
+  ],
+  index: 0,
+  el: null,
+  timer: null,
+
+  init: function () {
+    this.el = document.getElementById('tickerText');
+    if (!this.el) return;
+    this._tick();
+    this.timer = setInterval(this._tick.bind(this), 4000);
+  },
+
+  _tick: function () {
+    var evt = this.events[this.index];
+    this.el.innerHTML = '<i class="fas fa-' + evt.icon + '" style="color:' + evt.color + '"></i>' + evt.text;
+    this.index = (this.index + 1) % this.events.length;
+  }
+};
 
 /* =====================================================
    AUTH UI
@@ -736,5 +950,29 @@ document.addEventListener('DOMContentLoaded', function () {
   } catch (e) {
     console.warn('[DataStream] Failed to init users:', e);
   }
-  initAuthUI();
+
+  var session = Auth.getSession();
+  if (session) {
+    var authScreen = document.getElementById('authScreen');
+    var dashboard = document.getElementById('dashboardApp');
+    if (authScreen) authScreen.style.display = 'none';
+    if (dashboard) {
+      dashboard.style.display = 'block';
+      void dashboard.offsetHeight;
+      dashboard.classList.remove('hidden');
+      dashboard.classList.add('visible');
+      dashboard.style.display = '';
+    }
+
+    var initialsEl = document.getElementById('userInitials');
+    var nameEl = document.getElementById('dropdownUserName');
+    var emailEl = document.getElementById('dropdownUserEmail');
+    if (initialsEl) initialsEl.textContent = session.initials;
+    if (nameEl) nameEl.textContent = session.name;
+    if (emailEl) emailEl.textContent = session.email;
+
+    initDashboard();
+  } else {
+    window.location.replace('login-react.html');
+  }
 });
