@@ -29,7 +29,7 @@
                     <i class="fas fa-chart-line brand-icon"></i>
                     <div>
                         <h1>E-Commerce Executive Analytics Dashboard</h1>
-                        <p class="subtitle">Real-Time Revenue, Conversion & Product Performance Insights</p>
+                        <p class="subtitle">Real-time revenue, orders, conversion &amp; product performance — all in one place</p>
                     </div>
                 </div>
                 <div class="header-actions">
@@ -129,7 +129,7 @@
         <div class="role-view active" id="view-dashboard">
 
         <!-- SMART INSIGHTS BAR -->
-        <div class="insights-bar">
+        <div class="insights-bar" title="Automated insights generated from your data">
             <span class="insights-icon"><i class="fas fa-lightbulb"></i></span>
             <span class="insights-rotator" id="insightsRotator">Analyzing your data...</span>
         </div>
@@ -144,34 +144,34 @@
 
         <!-- KPI GRID -->
         <section class="kpi-grid" id="kpiGrid">
-            <div class="kpi-card" id="kpiRevenue" data-delay="0">
-                <div class="kpi-icon revenue"><i class="fas fa-dollar-sign"></i></div>
+            <div class="kpi-card" id="kpiRevenue" data-delay="0" title="Total revenue generated across all products and categories">
+                <div class="kpi-icon revenue"><i class="fas fa-rupee-sign"></i></div>
                 <div class="kpi-body">
-                    <p class="kpi-label">Total Revenue</p>
+                    <p class="kpi-label">Total Revenue <span class="kpi-help micro-tip" data-tip="Gross revenue from all orders before deductions">&#9432;</span></p>
                     <p class="kpi-value" id="kpiRevenueValue">--</p>
                     <span class="kpi-badge" id="kpiRevenueBadge">--</span>
                 </div>
             </div>
-            <div class="kpi-card" id="kpiOrders" data-delay="100">
+            <div class="kpi-card" id="kpiOrders" data-delay="100" title="Total number of orders placed in the selected period">
                 <div class="kpi-icon orders"><i class="fas fa-shopping-cart"></i></div>
                 <div class="kpi-body">
-                    <p class="kpi-label">Total Orders</p>
+                    <p class="kpi-label">Total Orders <span class="kpi-help micro-tip" data-tip="Number of completed customer orders">&#9432;</span></p>
                     <p class="kpi-value" id="kpiOrdersValue">--</p>
                     <span class="kpi-badge" id="kpiOrdersBadge">--</span>
                 </div>
             </div>
-            <div class="kpi-card" id="kpiAov" data-delay="200">
+            <div class="kpi-card" id="kpiAov" data-delay="200" title="Average revenue per order — higher is better">
                 <div class="kpi-icon aov"><i class="fas fa-receipt"></i></div>
                 <div class="kpi-body">
-                    <p class="kpi-label">Avg. Order Value (AOV)</p>
+                    <p class="kpi-label">Avg. Order Value <span class="kpi-help micro-tip" data-tip="Total Revenue ÷ Total Orders — measures how much customers spend per purchase">&#9432;</span></p>
                     <p class="kpi-value" id="kpiAovValue">--</p>
                     <span class="kpi-badge" id="kpiAovBadge">--</span>
                 </div>
             </div>
-            <div class="kpi-card" id="kpiConversion" data-delay="300">
+            <div class="kpi-card" id="kpiConversion" data-delay="300" title="Percentage of visitors who completed a purchase">
                 <div class="kpi-icon conversion"><i class="fas fa-percentage"></i></div>
                 <div class="kpi-body">
-                    <p class="kpi-label">Conversion Rate</p>
+                    <p class="kpi-label">Conversion Rate <span class="kpi-help micro-tip" data-tip="Orders ÷ Total Visitors × 100 — industry benchmark is ~2.5%">&#9432;</span></p>
                     <p class="kpi-value" id="kpiConversionValue">--</p>
                     <span class="kpi-badge" id="kpiConversionBadge">--</span>
                 </div>
@@ -184,37 +184,38 @@
             <span class="section-label-text">Operations &amp; Engagement</span>
             <span class="section-label-line"></span>
         </div>
+        <p class="section-label-desc">System performance metrics — data ingestion speed, query response times, and user activity</p>
 
         <!-- FOCUS METRICS GRID -->
         <section class="kpi-grid" id="focusGrid">
-            <div class="kpi-card" id="kpiIngestion" data-delay="50">
+            <div class="kpi-card" id="kpiIngestion" data-delay="50" title="Volume of data records processed into the system">
                 <div class="kpi-icon ingestion"><i class="fas fa-database"></i></div>
                 <div class="kpi-body">
-                    <p class="kpi-label">Ingestion Volume</p>
+                    <p class="kpi-label">Ingestion Volume <span class="kpi-help micro-tip" data-tip="Number of data records ingested from all sources">&#9432;</span></p>
                     <p class="kpi-value" id="kpiIngestionValue">--</p>
                     <span class="kpi-badge" id="kpiIngestionBadge">--</span>
                 </div>
             </div>
-            <div class="kpi-card" id="kpiQueryPerf" data-delay="150">
+            <div class="kpi-card" id="kpiQueryPerf" data-delay="150" title="Average time taken to execute database queries">
                 <div class="kpi-icon query"><i class="fas fa-gauge-high"></i></div>
                 <div class="kpi-body">
-                    <p class="kpi-label">Query Performance</p>
+                    <p class="kpi-label">Query Performance <span class="kpi-help micro-tip" data-tip="Average response time in milliseconds — lower is better">&#9432;</span></p>
                     <p class="kpi-value" id="kpiQueryPerfValue">--</p>
                     <span class="kpi-badge" id="kpiQueryPerfBadge">--</span>
                 </div>
             </div>
-            <div class="kpi-card" id="kpiSessions" data-delay="250">
+            <div class="kpi-card" id="kpiSessions" data-delay="250" title="Number of unique dashboard viewing sessions">
                 <div class="kpi-icon sessions"><i class="fas fa-users"></i></div>
                 <div class="kpi-body">
-                    <p class="kpi-label">Dashboard Sessions</p>
+                    <p class="kpi-label">Dashboard Sessions <span class="kpi-help micro-tip" data-tip="Number of times users have opened the dashboard">&#9432;</span></p>
                     <p class="kpi-value" id="kpiSessionsValue">--</p>
                     <span class="kpi-badge" id="kpiSessionsBadge">--</span>
                 </div>
             </div>
-            <div class="kpi-card" id="kpiExports" data-delay="350">
+            <div class="kpi-card" id="kpiExports" data-delay="350" title="Number of CSV/PDF report exports generated">
                 <div class="kpi-icon exports"><i class="fas fa-file-export"></i></div>
                 <div class="kpi-body">
-                    <p class="kpi-label">Report Exports</p>
+                    <p class="kpi-label">Report Exports <span class="kpi-help micro-tip" data-tip="Count of dashboard exports generated this period">&#9432;</span></p>
                     <p class="kpi-value" id="kpiExportsValue">--</p>
                     <span class="kpi-badge" id="kpiExportsBadge">--</span>
                 </div>
@@ -229,7 +230,7 @@
                     <span class="chart-period">Monthly · 12 Months</span>
                 </div>
                 <div class="chart-container">
-                    <canvas id="revenueChart"></canvas>
+                    <canvas id="revenueChart" title="Line chart showing gross revenue and net profit over the last 12 months"></canvas>
                 </div>
             </div>
 
@@ -239,7 +240,7 @@
                     <span class="chart-period">Share of Revenue</span>
                 </div>
                 <div class="chart-container">
-                    <canvas id="categoryChart"></canvas>
+                    <canvas id="categoryChart" title="Donut chart showing revenue distribution across product categories"></canvas>
                 </div>
             </div>
 
@@ -249,7 +250,7 @@
                     <span class="chart-period">Customer Journey</span>
                 </div>
                 <div class="chart-container">
-                    <canvas id="funnelChart"></canvas>
+                    <canvas id="funnelChart" title="Bar chart showing how users progress from visitors to completed purchases"></canvas>
                 </div>
             </div>
 
@@ -275,7 +276,7 @@
         </section>
 
         <!-- ACTIVITY TICKER -->
-        <div class="activity-ticker" id="activityTicker">
+        <div class="activity-ticker" id="activityTicker" title="Live activity feed — real-time events from the platform">
             <span class="ticker-dot"></span>
             <span class="ticker-text" id="tickerText">Simulating live activity...</span>
         </div>
@@ -519,10 +520,10 @@ ORDER BY 1;</textarea>
                         <table class="qc-results-table">
                             <thead><tr><th>month</th><th>orders</th><th>revenue</th></tr></thead>
                             <tbody>
-                                <tr><td>2025-01-01</td><td>1,847</td><td>$348,291.00</td></tr>
-                                <tr><td>2025-02-01</td><td>1,932</td><td>$375,104.00</td></tr>
-                                <tr><td>2025-03-01</td><td>2,104</td><td>$412,550.00</td></tr>
-                                <tr><td>2025-04-01</td><td>1,876</td><td>$381,220.00</td></tr>
+                                <tr><td>2025-01-01</td><td>1,847</td><td>₹348,291.00</td></tr>
+                                <tr><td>2025-03-01</td><td>2,104</td><td>₹412,550.00</td></tr>
+                                <tr><td>2025-02-01</td><td>1,932</td><td>₹375,104.00</td></tr>
+                                <tr><td>2025-04-01</td><td>1,876</td><td>₹381,220.00</td></tr>
                             </tbody>
                         </table>
                     </div>

@@ -2,6 +2,8 @@
    DataStream BI — Complete Application Logic
    ===================================================== */
 
+const CURRENCY = { symbol: '\u20B9', locale: 'en-IN' };
+
 /* ===== TOAST SYSTEM ===== */
 const Toast = {
   container: document.getElementById('toastContainer'),
@@ -216,9 +218,9 @@ var KpiEngine = {
 
   render: function () {
     var cards = [
-      { id: 'kpiRevenueValue', bid: 'kpiRevenueBadge', raw: this.totalRevenue, fmt: function (v) { return '$' + Number(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }, badge: '\u2191 ' + this.revenueGrowth.toFixed(1) + '% vs last month', cls: 'up' },
+      { id: 'kpiRevenueValue', bid: 'kpiRevenueBadge', raw: this.totalRevenue, fmt: function (v) { return CURRENCY.symbol + Number(v).toLocaleString(CURRENCY.locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }, badge: '\u2191 ' + this.revenueGrowth.toFixed(1) + '% vs last month', cls: 'up' },
       { id: 'kpiOrdersValue', bid: 'kpiOrdersBadge', raw: this.totalOrders, fmt: function (v) { return Math.round(v).toLocaleString(); }, badge: '\u2191 ' + this.orderGrowth.toFixed(1) + '% vs last month', cls: 'up' },
-      { id: 'kpiAovValue', bid: 'kpiAovBadge', raw: this.aov, fmt: function (v) { return '$' + Number(v).toFixed(2); }, badge: '\u2193 ' + Math.abs(this.aovGrowth).toFixed(1) + '% vs last month', cls: 'down' },
+      { id: 'kpiAovValue', bid: 'kpiAovBadge', raw: this.aov, fmt: function (v) { return CURRENCY.symbol + Number(v).toFixed(2); }, badge: '\u2193 ' + Math.abs(this.aovGrowth).toFixed(1) + '% vs last month', cls: 'down' },
       { id: 'kpiConversionValue', bid: 'kpiConversionBadge', raw: this.conversionRate, fmt: function (v) { return Number(v).toFixed(2) + '%'; }, badge: '\u2191 ' + this.convGrowth.toFixed(1) + '% vs last month', cls: 'up' }
     ];
 
@@ -293,7 +295,7 @@ function renderProductsTable() {
   for (var i = 0; i < DATA.products.length; i++) {
     var p = DATA.products[i];
     var tr = document.createElement('tr');
-    tr.innerHTML = '<td><div class="product-cell"><span class="product-rank">' + (i + 1) + '</span><span class="product-name">' + escHtml(p.name) + '</span></div></td><td>$' + p.revenue.toLocaleString() + '</td><td>' + p.units.toLocaleString() + '</td><td><span class="stock-badge ' + (p.stock === 'In Stock' ? 'in-stock' : 'low-stock') + '">' + escHtml(p.stock) + '</span></td>';
+    tr.innerHTML = '<td><div class="product-cell"><span class="product-rank">' + (i + 1) + '</span><span class="product-name">' + escHtml(p.name) + '</span></div></td><td>' + CURRENCY.symbol + p.revenue.toLocaleString() + '</td><td>' + p.units.toLocaleString() + '</td><td><span class="stock-badge ' + (p.stock === 'In Stock' ? 'in-stock' : 'low-stock') + '">' + escHtml(p.stock) + '</span></td>';
     tbody.appendChild(tr);
   }
 }
@@ -376,11 +378,11 @@ function initRevenueChart(ctx) {
       responsive: true, maintainAspectRatio: false, interaction: { intersect: false, mode: 'index' },
       scales: {
         x: { grid: { color: p.grid }, ticks: { color: p.tick, font: { size: 11 } } },
-        y: { grid: { color: p.gridStrong }, ticks: { color: p.tick, font: { size: 11 }, callback: function (v) { return '$' + v.toLocaleString(); } } }
+        y: { grid: { color: p.gridStrong }, ticks: { color: p.tick, font: { size: 11 }, callback: function (v) { return CURRENCY.symbol + v.toLocaleString(); } } }
       },
       plugins: {
         legend: { labels: { color: p.legend, font: { size: 11 }, padding: 16, usePointStyle: true, pointStyle: 'circle' } },
-        tooltip: { backgroundColor: p.tooltipBg, titleColor: p.tooltipTitle, bodyColor: p.tooltipBody, borderColor: p.tooltipBorder, borderWidth: 1, padding: 12, cornerRadius: 8, callbacks: { label: function (ctx) { return ctx.dataset.label + ': $' + ctx.parsed.y.toLocaleString(); } } }
+        tooltip: { backgroundColor: p.tooltipBg, titleColor: p.tooltipTitle, bodyColor: p.tooltipBody, borderColor: p.tooltipBorder, borderWidth: 1, padding: 12, cornerRadius: 8, callbacks: { label: function (ctx) { return ctx.dataset.label + ': ' + CURRENCY.symbol + ctx.parsed.y.toLocaleString(); } } }
       }
     }
   });
@@ -400,7 +402,7 @@ function initCategoryChart(ctx) {
       responsive: true, maintainAspectRatio: false, cutout: '65%',
       plugins: {
         legend: { position: 'bottom', labels: { color: p.legend, font: { size: 11, weight: '500' }, padding: 16, usePointStyle: true, pointStyle: 'circle' } },
-        tooltip: { backgroundColor: p.tooltipBg, titleColor: p.tooltipTitle, bodyColor: p.tooltipBody, borderColor: p.tooltipBorder, borderWidth: 1, padding: 12, cornerRadius: 8, callbacks: { label: function (ctx) { var total = ctx.dataset.data.reduce(function (a, b) { return a + b; }, 0); return ctx.label + ': $' + ctx.parsed.toLocaleString() + ' (' + ((ctx.parsed / total) * 100).toFixed(1) + '%)'; } } }
+        tooltip: { backgroundColor: p.tooltipBg, titleColor: p.tooltipTitle, bodyColor: p.tooltipBody, borderColor: p.tooltipBorder, borderWidth: 1, padding: 12, cornerRadius: 8, callbacks: { label: function (ctx) { var total = ctx.dataset.data.reduce(function (a, b) { return a + b; }, 0); return ctx.label + ': ' + CURRENCY.symbol + ctx.parsed.toLocaleString() + ' (' + ((ctx.parsed / total) * 100).toFixed(1) + '%)'; } } }
       }
     }
   });
@@ -442,24 +444,24 @@ function initExport() {
     var sep = ',';
     var csv = '\uFEFF';
     csv += 'Metric' + sep + 'Value\n';
-    csv += 'Total Revenue' + sep + '$' + KpiEngine.totalRevenue.toFixed(2) + '\n';
+    csv += 'Total Revenue' + sep + CURRENCY.symbol + KpiEngine.totalRevenue.toFixed(2) + '\n';
     csv += 'Total Orders' + sep + KpiEngine.totalOrders + '\n';
-    csv += 'Avg Order Value' + sep + '$' + KpiEngine.aov.toFixed(2) + '\n';
+    csv += 'Avg Order Value' + sep + CURRENCY.symbol + KpiEngine.aov.toFixed(2) + '\n';
     csv += 'Conversion Rate' + sep + KpiEngine.conversionRate.toFixed(2) + '%\n';
     csv += 'Ingestion Volume' + sep + FocusMetrics.ingestion.toLocaleString() + ' records\n';
     csv += 'Query Performance' + sep + FocusMetrics.queryPerf + 'ms\n';
     csv += 'Dashboard Sessions' + sep + FocusMetrics.sessions.toLocaleString() + '\n';
     csv += 'Report Exports' + sep + FocusMetrics.exports.toLocaleString() + '\n\n';
     csv += 'Month' + sep + 'Gross Revenue' + sep + 'Net Profit\n';
-    for (var i = 0; i < DATA.months.length; i++) { csv += DATA.months[i] + sep + '$' + DATA.revenue[i] + sep + '$' + DATA.profit[i] + '\n'; }
+    for (var i = 0; i < DATA.months.length; i++) { csv += DATA.months[i] + sep + CURRENCY.symbol + DATA.revenue[i] + sep + CURRENCY.symbol + DATA.profit[i] + '\n'; }
     csv += '\nCategory' + sep + 'Revenue\n';
     var catKeys = Object.keys(DATA.categories);
-    for (var ci = 0; ci < catKeys.length; ci++) { csv += catKeys[ci] + sep + '$' + DATA.categories[catKeys[ci]] + '\n'; }
+    for (var ci = 0; ci < catKeys.length; ci++) { csv += catKeys[ci] + sep + CURRENCY.symbol + DATA.categories[catKeys[ci]] + '\n'; }
     csv += '\nFunnel Stage' + sep + 'Users\n';
     var funKeys = Object.keys(DATA.funnel);
     for (var fi = 0; fi < funKeys.length; fi++) { csv += funKeys[fi] + sep + DATA.funnel[funKeys[fi]] + '\n'; }
     csv += '\nProduct' + sep + 'Revenue' + sep + 'Units Sold' + sep + 'Stock\n';
-    for (var pi = 0; pi < DATA.products.length; pi++) { csv += DATA.products[pi].name + sep + '$' + DATA.products[pi].revenue + sep + DATA.products[pi].units + sep + DATA.products[pi].stock + '\n'; }
+    for (var pi = 0; pi < DATA.products.length; pi++) { csv += DATA.products[pi].name + sep + CURRENCY.symbol + DATA.products[pi].revenue + sep + DATA.products[pi].units + sep + DATA.products[pi].stock + '\n'; }
 
     var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     var link = document.createElement('a');
@@ -789,9 +791,9 @@ var InsightEngine = {
     var roleLabel = ROLES[Auth.getRole()] ? ROLES[Auth.getRole()].label : 'User';
     this.insights = [
       'Signed in as <strong>' + roleLabel + '</strong> — ' + ROLES[Auth.getRole()].desc + '.',
-      'Revenue hit $' + rev.toLocaleString() + ' — up ' + revG.toFixed(1) + '% vs last period. ' + topCat + ' leads at $' + topCatVal.toLocaleString() + '.',
+      'Revenue hit ' + CURRENCY.symbol + rev.toLocaleString() + ' — up ' + revG.toFixed(1) + '% vs last period. ' + topCat + ' leads at ' + CURRENCY.symbol + topCatVal.toLocaleString() + '.',
       'Conversion rate of ' + conv.toFixed(2) + '% is ' + (conv - 2.5).toFixed(2) + '% above industry benchmark.',
-      'Top seller: ' + prod.name + ' — $' + prod.revenue.toLocaleString() + ' revenue, ' + prod.units + ' units sold.',
+      'Top seller: ' + prod.name + ' — ' + CURRENCY.symbol + prod.revenue.toLocaleString() + ' revenue, ' + prod.units + ' units sold.',
       fm.ingestion.toLocaleString() + ' records ingested — up ' + fm.ingGrowth.toFixed(1) + '% with ' + fm.queryPerf + 'ms avg query time.',
       fm.sessions.toLocaleString() + ' dashboard sessions and ' + fm.exports.toLocaleString() + ' report exports this period.'
     ];
@@ -940,7 +942,7 @@ var ActivityTicker = {
     { icon: 'eye', text: '500+ product views in the last hour', color: '#8b5cf6' },
     { icon: 'star', text: '5★ review on Ergonomic Office Chair', color: '#FACC15' },
     { icon: 'trending-up', text: 'Conversion rate up 0.3% this hour', color: '#10b981' },
-    { icon: 'dollar-sign', text: '$2,450 revenue in the last 30 min', color: '#FF5733' },
+    { icon: 'rupee-sign', text: '\u20B92,450 revenue in the last 30 min', color: '#FF5733' },
     { icon: 'exclamation-triangle', text: 'Low stock alert: Smart Fitness Tracker Pro', color: '#ef4444' },
     { icon: 'clock', text: 'Peak shopping hour — 8 PM EST', color: '#38BDF8' }
   ],
